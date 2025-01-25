@@ -1,0 +1,187 @@
+Sub GenerateInvoices()
+    Dim wsOrders As Worksheet
+    Dim wsTemplate As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim invoice As String
+    Dim orderdate As String
+    Dim ewaybill As String
+    Dim dcno As String
+    Dim reverse As String
+    Dim state As String
+    Dim code As String
+    Dim transport As String
+    Dim vehicle As String
+    Dim lorry As String
+    Dim place As String
+    Dim contactp As String
+    Dim purchaseno As String
+    Dim purchasedate As String
+    Dim name As String
+    Dim address As String
+    Dim project As String
+    Dim contanct As String
+    Dim gstin As String
+    Dim ieccode As String
+    Dim state2 As String
+    Dim code2 As String
+    Dim panno As String
+    Dim name2 As String
+    Dim address2 As String
+    Dim contact2 As String
+    Dim email As String
+    Dim payment As String
+    Dim slno As String
+    Dim product As String
+    Dim hsncode As String
+    Dim uom As String
+    Dim units As String
+    Dim unitrates As String
+    Dim totalrates As String
+    Dim cgst As String
+    Dim sgst As String
+    Dim igst As String
+    Dim round As String
+    Dim gstr As String
+    Dim bankname As String
+    Dim acct As String
+    Dim branch As String
+    Dim ifsc As String
+    Dim pdfFilePath As String
+    Dim saveFolderPath As String
+    Dim script As String
+
+    ' Set your worksheets
+    Set wsOrders = ThisWorkbook.Sheets("Orders")
+    Set wsTemplate = ThisWorkbook.Sheets("Invoice")
+    
+    ' Find the last row with data in Orders sheet
+    lastRow = wsOrders.Cells(wsOrders.Rows.Count, "A").End(xlUp).Row
+
+    ' Prompt the user to select the folder to save PDFs (macOS workaround)
+    saveFolderPath = MacScript("return POSIX path of (choose folder with prompt ""Select Folder to Save Invoices"")")
+    If saveFolderPath = "" Then Exit Sub ' Exit if the user cancels
+
+    ' Loop through each order
+    For i = 3 To lastRow
+        ' Get order data
+        invoice = wsOrders.Cells(i, 1).Value
+        orderdate = wsOrders.Cells(i, 2).Value
+        ewaybill = wsOrders.Cells(i, 3).Value
+        dcno = wsOrders.Cells(i, 4).Value
+        reverse = wsOrders.Cells(i, 5).Value
+        state = wsOrders.Cells(i, 6).Value
+        code = wsOrders.Cells(i, 7).Value
+        transport = wsOrders.Cells(i, 8).Value
+        vehicle = wsOrders.Cells(i, 9).Value
+        lorry = wsOrders.Cells(i, 10).Value
+        place = wsOrders.Cells(i, 11).Value
+        contactp = wsOrders.Cells(i, 12).Value
+        purchaseno = wsOrders.Cells(i, 13).Value
+        purchasedate = wsOrders.Cells(i, 14).Value
+        name = wsOrders.Cells(i, 15).Value
+        address = wsOrders.Cells(i, 16).Value
+        project = wsOrders.Cells(i, 17).Value
+        contact = wsOrders.Cells(i, 18).Value
+        gstin = wsOrders.Cells(i, 19).Value
+        ieccode = wsOrders.Cells(i, 20).Value
+        state2 = wsOrders.Cells(i, 21).Value
+        code2 = wsOrders.Cells(i, 22).Value
+        panno = wsOrders.Cells(i, 23).Value
+        name2 = wsOrders.Cells(i, 24).Value
+        address2 = wsOrders.Cells(i, 25).Value
+        contact2 = wsOrders.Cells(i, 26).Value
+        email = wsOrders.Cells(i, 27).Value
+        payment = wsOrders.Cells(i, 28).Value
+        slno = wsOrders.Cells(i, 29).Value
+        product = wsOrders.Cells(i, 30).Value
+        hsncode = wsOrders.Cells(i, 31).Value
+        uom = wsOrders.Cells(i, 32).Value
+        units = wsOrders.Cells(i, 33).Value
+        unitrates = wsOrders.Cells(i, 34).Value
+        totalrates = wsOrders.Cells(i, 35).Value
+        cgst = wsOrders.Cells(i, 36).Value
+        sgst = wsOrders.Cells(i, 37).Value
+        igst = wsOrders.Cells(i, 38).Value
+        round = wsOrders.Cells(i, 39).Value
+        gstr = wsOrders.Cells(i, 40).Value
+        bankname = wsOrders.Cells(i, 41).Value
+        acct = wsOrders.Cells(i, 42).Value
+        branch = wsOrders.Cells(i, 43).Value
+        ifsc = wsOrders.Cells(i, 44).Value
+        
+        ' Fill the invoice template
+        wsTemplate.Range("D10").Value = invoice
+        wsTemplate.Range("D11").Value = orderdate
+        wsTemplate.Range("D12").Value = ewaybill
+        wsTemplate.Range("D13").Value = dcno
+        wsTemplate.Range("D14").Value = reverse
+        wsTemplate.Range("D15").Value = state
+        wsTemplate.Range("D16").Value = code
+        wsTemplate.Range("J10").Value = transport
+        wsTemplate.Range("J11").Value = vehicle
+        wsTemplate.Range("J12").Value = lorry
+        wsTemplate.Range("J13").Value = place
+        wsTemplate.Range("J14").Value = contactp
+        wsTemplate.Range("J15").Value = purchaseno
+        wsTemplate.Range("J16").Value = purchasedate
+        wsTemplate.Range("D18").Value = name
+        wsTemplate.Range("D19").Value = address
+        wsTemplate.Range("D24").Value = project
+        wsTemplate.Range("D25").Value = contact
+        wsTemplate.Range("D26").Value = gstin
+        wsTemplate.Range("D27").Value = ieccode
+        wsTemplate.Range("D28").Value = state2
+        wsTemplate.Range("D29").Value = code2
+        wsTemplate.Range("F29").Value = panno
+        wsTemplate.Range("J18").Value = name2
+        wsTemplate.Range("J19").Value = address2
+        wsTemplate.Range("J25").Value = contact2
+        wsTemplate.Range("J26").Value = email
+        wsTemplate.Range("J30").Value = payment
+        wsTemplate.Range("A33").Value = slno
+        wsTemplate.Range("B33").Value = product
+        wsTemplate.Range("F33").Value = hsncode
+        wsTemplate.Range("G33").Value = uom
+        wsTemplate.Range("H33").Value = units
+        wsTemplate.Range("I33").Value = unitrates
+        wsTemplate.Range("J33").Value = totalrates
+        wsTemplate.Range("J48").Value = cgst
+        wsTemplate.Range("J49").Value = sgst
+        wsTemplate.Range("J50").Value = igst
+        wsTemplate.Range("L52").Value = round
+        wsTemplate.Range("J54").Value = gstr
+        wsTemplate.Range("D53").Value = bankname
+        wsTemplate.Range("D54").Value = acct
+        wsTemplate.Range("D55").Value = branch
+        wsTemplate.Range("D56").Value = ifsc
+        
+        ' Adjust the page setup to fit the content to one page
+        With wsTemplate.PageSetup
+            .Zoom = False
+            .FitToPagesWide = 1
+            .FitToPagesTall = 1
+        End With
+        
+        ' Hide the shape before generating the PDF
+        wsTemplate.Shapes("Rounded Rectangle 1").Visible = False
+
+        ' Define the PDF file path
+        pdfFilePath = saveFolderPath & "INVOICE_" & invoice & "_" & project & ".pdf"
+
+        ' Save the template as a PDF
+        On Error GoTo ErrHandler
+        wsTemplate.ExportAsFixedFormat Type:=xlTypePDF, Filename:=pdfFilePath, Quality:=xlQualityStandard
+        On Error GoTo 0
+        
+        ' Show the shape again after generating the PDF
+        wsTemplate.Shapes("Rounded Rectangle 1").Visible = True
+        
+    Next i
+    
+    MsgBox "All invoices have been generated and saved as PDFs."
+    Exit Sub
+    
+ErrHandler:
+    MsgBox "An error occurred while generating the PDF: " & Err.Description
+End Sub
